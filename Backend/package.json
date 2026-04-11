@@ -1,0 +1,31 @@
+{
+  "name": "url_shortner_backend",
+  "version": "1.0.0",
+  "description": "A URL shortener backend built with Node.js, Express, and MongoDB. This application allows users to create shortened URLs that redirect to the original long URLs. It includes features such as user authentication, URL management, and analytics for tracking URL usage.",
+  "license": "ISC",
+  "author": "Azan Ali",
+  "type": "module",
+  "main": "index.js",
+
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.9.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.4.1",
+    "morgan": "^1.10.1",
+    "multer": "^2.1.1",
+    "nanoid": "^5.1.7"
+  },
+  "devDependencies": {
+    "prettier": "3.8.1"
+  }
+}
