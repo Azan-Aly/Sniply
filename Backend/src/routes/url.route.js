@@ -1,9 +1,12 @@
 import { Router } from "express";
 import { shortenUrl, redirectUrl, getRecentUrls, urlDelete, firstPage } from "../controllers/url.controller.js";
+import { getStats } from "../controllers/stats.controller.js";
 
 const router = Router();
 
 router.route("/").get(firstPage)
+
+router.route("/url/stats").get(getStats)
 
 router.route("/url/shorten").post(shortenUrl);
 router.route("/url/recent").get(getRecentUrls)

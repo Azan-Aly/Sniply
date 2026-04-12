@@ -1,107 +1,70 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import { Link, MousePointer2, MonitorCheck } from 'lucide-react'
 
-const Score = ({ response }) => {
-  const [shortUrl, setShortUrl] = useState('')
-    // setShortUrl(response?.data?.shortUrl)
-    const resp = response?.data?.shortUrl
+const Score = () => {
+  const [data, setData] = useState({});
+  const getStats = async () => {
+    try{
+      const response = await axios.get("http://localhost:3000/url/stats")
+      // console.log("Stats:", response.data.data);
+      setData(response.data.data);
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+    }
+  }
+
+  useEffect(() => {
+    getStats();
+  }, [])
+ 
+
+  const stats = [
+    {
+      id: 1,
+      value: data.totalLinks || 0,
+      label: 'Total Links',
+      icon: <Link />
+    },
+    {
+      id: 2,
+      value: data.clicks || 0,
+      label: 'Total Clicks',
+      icon: <MousePointer2 />
+    },
+    {
+      id: 3,
+      value: data.activeToday || 0,
+      label: 'Active Today',
+      icon: <MonitorCheck />
+    }
+  ]
+
   return (
-    <div className='flex items-center justify-center py-10 px-8'>
-      <div className='w-full max-w-md'>
-        <h2 className='text-2xl font-bold mb-4 text-center'>Shorted Url</h2>
-        <input
-          type='text'
-          placeholder='Your short URL will appear here'
-          value={resp}
-          readOnly
-          className='w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 focus:outline-none'
-        />
-      </div>``
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-6 md:px-12 py-10">
+      {stats.map((stat) => (
+        <div
+          key={stat.id}
+          className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-3xl">{stat.icon}</span>
+            <span className="text-xs text-gray-400 uppercase tracking-wider">
+              {stat.label}
+            </span>
+          </div>
+
+          <h2 className="text-4xl font-bold text-black text-center">
+            {stat.value}
+          </h2>
+
+          <div className="mt-3 h-1 w-full bg-gray-700 rounded-full overflow-hidden">
+            <div className="h-full bg-green-400 w-2/3"></div>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
 
 export default Score
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React from 'react'
-
-// const Score = ({ response }) => {
-//   const totalLinks = response?.data?.totalLinks || 0
-//   const totalClicks = response?.data?.clicks || 0
-//   const activeToday = response?.data?.activeToday || 0
-
-//   const stats = [
-//     {
-//       id: 1,
-//       value: totalLinks,
-//       label: 'Total links',
-//       icon: '🔗'
-//     },
-//     {
-//       id: 2,
-//       value: totalClicks,
-//       label: 'Total Clicks',
-//       icon: '👆'
-//     },
-//     {
-//       id: 3,
-//       value: activeToday,
-//       label: 'Active Today',
-//       icon: '🔥'
-//     }
-//   ]
-
-//   const StatCard = ({ stat }) => (
-//     <div className='w-1/3 bg-[#1d9e75] hover:bg-[#16a876] text-white text-center rounded-lg p-6 shadow-md transition-all duration-300 transform hover:scale-105'>
-//       <div className='text-4xl mb-2'>{stat.icon}</div>
-//       <h2 className='text-3xl font-bold mb-2'>{stat.value}</h2>
-//       <p className='text-sm font-medium uppercase tracking-wide'>{stat.label}</p>
-//     </div>
-//   )
-    
-//   return (
-//     <div className='flex items-center justify-between gap-6 py-10 px-8 sm:px-16 md:px-34'>
-//       {stats.map(stat => (
-//         <StatCard key={stat.id} stat={stat} />
-//       ))}
-//     </div>
-//   )
-// }
-
-// export default Score
