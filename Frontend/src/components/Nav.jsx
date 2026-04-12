@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react';
-
 
 const Nav = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const location = useLocation();
+    
+    useEffect(() => {
+      setMenuOpen(false);
+    }, [location]);
 
     return (
         <>
