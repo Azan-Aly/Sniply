@@ -7,8 +7,8 @@ import { ApiError } from "../utils/ApiError.js";
 const generateAccessAndRefreshTokens = async (userId) => {
     try {
         const user = await User.findById(userId);
-        const accessToken = await User.generateAccessToken()
-        const refreshToken = await User.generateRefreshToken()
+        const accessToken = await user.generateAccessToken()
+        const refreshToken = await user.generateRefreshToken()
 
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false })
@@ -72,12 +72,12 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Invalid email or password");
     }
 
-    const isMatch = await user.comparePassword(password);
+    const isMatch = await user.isPasswordCorrect(password);
     if (!isMatch) {
         throw new ApiError(400, "Invalid email or password");
     }
 
-    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id)
 
     const loggedInUser = await User.findById(user._id).select(
         "-password -refreshToken"
