@@ -3,6 +3,8 @@ import Layout from './components/Layout'
 import { Routes, Route } from "react-router-dom";
 import Hero from './components/Hero';
 import ShowOutput from './components/ShowOutput';
+import Register from './components/Register';
+import Login from './components/Login';
 
 
 
@@ -15,6 +17,8 @@ const App = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<Hero />} />
           <Route path="dashboard" element={<ShowOutput />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<Login />} />
         </Route>
       </Routes>
     </div>

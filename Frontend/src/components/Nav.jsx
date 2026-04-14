@@ -12,14 +12,22 @@ const Nav = () => {
 
     return (
         <>
-            <div className='hidden sm:flex md:gap-2 lg:gap-4 items-center'>
+            <div className='hidden sm:flex sm:gap-1 md:gap-2 lg:gap-4 items-center'>
                 <Link to="/dashboard">
-                    <p className='px-4 py-2 rounded-full font-bold hover:bg-[#15c08a] cursor-pointer'>Dashboard</p>
+                    <p className='sm:px-2 lg:px-4 py-2 rounded-full font-bold hover:bg-[#15c08a] cursor-pointer'>Dashboard</p>
                 </Link>
-                <p className='px-4 py-2 rounded-full font-bold hover:bg-[#15c08a] cursor-pointer'>Analytics</p>
-                <p className='px-4 py-2 rounded-full font-bold hover:bg-[#15c08a] cursor-pointer'>Settings</p>
-                <button className='font-bold border px-4 py-2 rounded-md hover:bg-[#15dc96] cursor-pointer'>SignUp</button>
-                <button className='font-bold border px-4 py-2 rounded-md text-white bg-[#15c08a] hover:bg-[#0a7952] cursor-pointer'>Login</button>
+                <Link to="/analytics">
+                    <p className='sm:px-2 lg:px-4 py-2 rounded-full font-bold hover:bg-[#15c08a] cursor-pointer'>Analytics</p>
+                </Link>
+                <Link to="/settings">
+                    <p className='sm:px-2 lg:px-4 py-2 rounded-full font-bold hover:bg-[#15c08a] cursor-pointer'>Settings</p>
+                </Link>
+                <Link to="/register">
+                    <button className='font-bold border px-4 py-2 rounded-md hover:bg-[#15dc96] cursor-pointer'>SignUp</button>
+                </Link>
+                <Link to="/login">
+                    <button className='font-bold border border-[#15c08a]-300 px-4 py-2 rounded-md text-white bg-[#15c08a] hover:bg-[#0a7952] cursor-pointer'>Login</button>
+                </Link>
             </div>
 
             <div className='block sm:hidden'>
@@ -30,11 +38,18 @@ const Nav = () => {
                         <Link to="/dashboard">
                             <li className='font-bold px-4 py-2 hover:rounded-md hover:bg-[#15c08a] cursor-pointer'>Dashboard</li>
                         </Link>
-                        <li className='font-bold px-4 py-2 hover:rounded-md hover:bg-[#15c08a] cursor-pointer'>Analytics</li>
-                        <li className='font-bold px-4 py-2 hover:rounded-md hover:bg-[#15c08a] cursor-pointer'>Profile</li>
-                        <button className='font-bold border px-4 py-2 rounded-md hover:bg-[#15dc96] cursor-pointer'>SignUp</button>
-                        <button className='font-bold border px-4 py-2 rounded-md text-white bg-[#15c08a] hover:bg-[#0a7952] cursor-pointer'>Login</button>
-
+                        <Link to="/analytics">
+                            <li className='font-bold px-4 py-2 hover:rounded-md hover:bg-[#15c08a] cursor-pointer'>Analytics</li>
+                        </Link>
+                        <Link to="/profile">
+                            <li className='font-bold px-4 py-2 hover:rounded-md hover:bg-[#15c08a] cursor-pointer'>Profile</li>
+                        </Link>
+                        <Link to="/register">
+                            <button className='w-full font-bold border px-4 py-2 rounded-md hover:bg-[#15dc96] cursor-pointer'>SignUp</button>
+                        </Link>
+                        <Link to="/login">
+                            <button className='w-full font-bold border px-4 py-2 rounded-md text-white bg-[#15c08a] hover:bg-[#0a7952] cursor-pointer'>Login</button>
+                        </Link>
                     </ul>
                 )}
             </div>
