@@ -194,7 +194,7 @@ npm install axios
 import axios from "axios";
 
 export const shorten = (url) => {
-  return axios.post("http://localhost:5000/api/shorten", { originalUrl: url });
+  return axios.post("http://localhost:3000/api/shorten", { originalUrl: url });
 };
 ```
 

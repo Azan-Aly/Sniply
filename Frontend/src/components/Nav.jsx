@@ -23,7 +23,7 @@ const Nav = () => {
                     <p className='sm:px-2 lg:px-4 py-2 rounded-full font-bold hover:bg-[#15c08a] cursor-pointer'>Settings</p>
                 </Link>
                 <Link to="/register">
-                    <button className='font-bold border px-4 py-2 rounded-md hover:bg-[#15dc96] cursor-pointer'>SignUp</button>
+                    <button className='font-bold border px-4 py-2 rounded-md hover:scale-95 cursor-pointer'>SignUp</button>
                 </Link>
                 <Link to="/login">
                     <button className='font-bold border border-[#15c08a]-300 px-4 py-2 rounded-md text-white bg-[#15c08a] hover:bg-[#0a7952] cursor-pointer'>Login</button>

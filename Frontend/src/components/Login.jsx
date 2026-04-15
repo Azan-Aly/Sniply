@@ -22,7 +22,7 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-180 flex items-center justify-center bg-linear-to-br from-green-100 to-emerald-200 px-4">
+    <div className="min-h-180 flex items-center justify-center bg-linear-to-br from-green-100 to-emerald-100 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 sm:p-8">
         <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">Welcome Back</h2>
 
@@ -60,7 +60,7 @@ const Login = () => {
           {/* Button */}
           <button
             type="submit"
-            className="mt-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2.5 rounded-lg transition duration-200 shadow-md"
+            className="mt-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2.5 rounded-lg transition duration-200 shadow-md cursor-pointer"
           >
             Login
           </button>
