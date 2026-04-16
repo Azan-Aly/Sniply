@@ -52,6 +52,7 @@ const Hero = () => {
               placeholder='Enter Long URL here...'
               value={longUrl}
               onChange={(e) => setLongUrl(e.target.value)}
+              required
             />
             <input type="submit" value="Shorten"
               className='bg-[#1D9E75] text-white cursor-pointer py-2 sm:py-3 px-4 sm:px-6 text-sm sm:text-base rounded-lg font-bold hover:bg-[#15774d] transition sm:w-auto w-full'

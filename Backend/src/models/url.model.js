@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-
+import { User } from "./users.model.js";
 const urlSchema = new Schema(
     {
         originalUrl: {
@@ -19,6 +19,10 @@ const urlSchema = new Schema(
             type: Number,
             default: 0
         },
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+        },
         createdAt: {
             type: Date,
             default: Date.now
@@ -26,6 +30,7 @@ const urlSchema = new Schema(
         expiresAt: {
             type: Date
         }
+
     }, { timestamps: true }
 );
 
