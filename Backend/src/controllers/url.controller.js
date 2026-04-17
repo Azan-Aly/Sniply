@@ -2,7 +2,7 @@ import { URL } from "../models/url.model.js";
 import { urlGenerate } from "../services/urlGen.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from "../utils/AsyncHandler.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 
 const shortenUrl = asyncHandler(async (req, res) => {
@@ -12,8 +12,10 @@ const shortenUrl = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Original URL is required");
   }
 
-  // Optional: prevent duplicate for same URL
-  const existing = await URL.findOne({ originalUrl });
+  const existing = await URL.findOne({
+    originalUrl,
+    user: req.user._id
+  });
   if (existing) {
     return res.status(200).json(
       new ApiResponse(200, {
@@ -32,7 +34,7 @@ const shortenUrl = asyncHandler(async (req, res) => {
     }
     shortId = customAlias;
   } else {
-    
+
     let isUnique = false;
 
     while (!isUnique) {
@@ -47,6 +49,7 @@ const shortenUrl = asyncHandler(async (req, res) => {
     shortId,
     shortUrl: `${req.protocol}://${req.get("host")}/${shortId}`,
     expiresAt: expiryDate || null,
+    user: req.user?._id || null
   });
 
   if (!newUrl) {
@@ -95,7 +98,9 @@ const redirectUrl = asyncHandler(async (req, res) => {
 
 // GET RECENT URLS
 const getRecentUrls = asyncHandler(async (req, res) => {
-  const recentUrls = await URL.find().sort({ createdAt: -1 }).limit(10);
+  const recentUrls = await URL.find({ user: req.user._id })
+    .sort({ createdAt: -1 })
+    .limit(10);
   return res.status(200).json(new ApiResponse(200, recentUrls, "Recent URLs fetched successfully"));
 });
 
@@ -104,10 +109,10 @@ const getRecentUrls = asyncHandler(async (req, res) => {
 // Delete URL
 const urlDelete = asyncHandler(async (req, res) => {
   const { shortId } = req.params;
-  const deleted = await URL.findOneAndDelete({ shortId });
+  const deleted = await URL.findOneAndDelete({ shortId, user: req.user._id });
   if (!deleted) {
     throw new ApiError(404, "URL not found");
-  } else {  
+  } else {
     return res.status(200).json(new ApiResponse(200, null, "URL deleted successfully"));
   }
 });

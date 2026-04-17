@@ -21,8 +21,8 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
 const registerUser = asyncHandler(async (req, res) => {
 
-    const { fullname, username, email, password } = req.body;
-    if (!fullname || !username || !email || !password) {
+    const { fullName, username, email, password } = req.body;
+    if (!fullName || !username || !email || !password) {
         throw new ApiError(400, "All fields are required");
     }
 
@@ -33,7 +33,7 @@ const registerUser = asyncHandler(async (req, res) => {
     
     
     const user = await User.create(
-        { fullname, username, email, password }
+        { fullName, username, email, password }
     );
 
     const {refreshToken, accessToken} = await generateAccessAndRefreshTokens(user._id)
@@ -100,8 +100,32 @@ const loginUser = asyncHandler(async (req, res) => {
         )
 })
 
+const logoutUser = asyncHandler(async (req, res) => {
+    const user = req.user
+
+    await User.findByIdAndUpdate(
+        user._id,
+        {
+            $set: { refreshToken: undefined }
+        },
+        { new: true }
+    )
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    return res.status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(
+            new ApiResponse(200, {}, "User logged out")
+        )    
+})
 
 export {
     registerUser,
-    loginUser
+    loginUser,
+    logoutUser
 }

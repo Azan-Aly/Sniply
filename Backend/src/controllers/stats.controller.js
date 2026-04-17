@@ -1,13 +1,18 @@
 import { URL } from "../models/url.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from "../utils/AsyncHandler.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const getStats = asyncHandler(async (req, res) => {
     try {
-        const totalLinks = await URL.countDocuments();
+        const totalLinks = await URL.countDocuments({
+            user: req.user._id
+        });
 
         const totalClicksAgg = await URL.aggregate([
+            {
+                $match: { user: req.user._id }
+            },
             {
                 $group: {
                     _id: null,
@@ -39,3 +44,4 @@ export const getStats = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Error fetching stats");
     }
 });
+

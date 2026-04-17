@@ -27,7 +27,7 @@ const userSchema = new Schema({
     },
     avatar: {
         type: String, // cloudinary url
-        required: true
+        default: `https://ui-avatars.com/api/?name=${this.fullname}&background=random&rounded=true&size=128`
     },
     password: {
         type: String, //hashed form
