@@ -5,13 +5,14 @@ import Hero from './components/Hero';
 import ShowOutput from './components/ShowOutput';
 import Register from './components/Register';
 import Login from './components/Login';
-
-
-
+import { Toaster } from "react-hot-toast";
+import axios from 'axios';
 
 const App = () => {
+  axios.defaults.withCredentials = true;
   return (
     <div className='min-h-screen w-full overflow-x-hidden'>
+      <Toaster position="top-right" />
       {/* <Layout /> */}
       <Routes>
         <Route path="/" element={<Layout />}>

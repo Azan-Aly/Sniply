@@ -1,10 +1,17 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
+
 
 const Register = () => {
+
+  const navigate = useNavigate()
+  const { checkAuth } = useAuth()
   const [form, setForm] = useState({
-    fullname: '',
+    fullName: '',
     username: '',
     email: '',
     password: ''
@@ -20,9 +27,12 @@ const Register = () => {
     try {
       const response = await axios.post('http://localhost:3000/api/v1/users/register', form)
       console.log(response.data)
-
+      toast.success("Registered successfully!")
+      await checkAuth();
+      navigate("/")
     } catch (error) {
       console.error('Error registering user:', error)
+      toast.error("Failed to register.")
     }
 
     console.log(form)
@@ -37,12 +47,12 @@ const Register = () => {
 
           {/* Full Name */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="fullname" className="font-medium">Full Name</label>
+            <label htmlFor="fullName" className="font-medium">Full Name</label>
             <input
               type="text"
-              name="fullname"
-              id="fullname"
-              value={form.fullname}
+              name="fullName"
+              id="fullName"
+              value={form.fullName}
               onChange={handleChange}
               placeholder="Enter your full name"
               className="border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-emerald-400 transition"

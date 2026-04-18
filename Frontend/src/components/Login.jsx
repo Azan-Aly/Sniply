@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' })
+  const navigate = useNavigate()
+  const { loggedIn, setLoggedIn, checkAuth } = useAuth()
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -15,9 +20,17 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:3000/api/v1/users/login', form)
       console.log(response.data)
+
+      setLoggedIn(true)
+      await checkAuth();
+      toast.success("Logged in successfully!")
+      navigate("/");
+
     } catch (error) {
       console.error('Error logging in:', error)
+      toast.error("Failed to log in.")
     }
+
     console.log(form)
   }
 

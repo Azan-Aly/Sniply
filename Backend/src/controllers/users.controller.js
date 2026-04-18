@@ -10,10 +10,15 @@ const generateAccessAndRefreshTokens = async (userId) => {
         const accessToken = await user.generateAccessToken()
         const refreshToken = await user.generateRefreshToken()
 
+        console.log("access:", accessToken);
+        console.log("Refresh:", refreshToken);
+
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false })
-
+        console.log("code ab phata");
+        
         return { accessToken, refreshToken }
+        console.log("nai ab phata");
     } catch (error) {
         throw new ApiError(500, "Error generating tokens")
     }
@@ -30,17 +35,17 @@ const registerUser = asyncHandler(async (req, res) => {
     if (existingUser) {
         throw new ApiError(400, "User with this email or username already exists");
     }
-    
-    
+
+
     const user = await User.create(
         { fullName, username, email, password }
     );
 
-    const {refreshToken, accessToken} = await generateAccessAndRefreshTokens(user._id)
-    
+    const { refreshToken, accessToken } = await generateAccessAndRefreshTokens(user._id)
+
     const options = {
         httpOnly: true,
-        secure: true
+        secure: process.env.NODE_ENV === "production"
     }
 
     const createdUser = await User.findById(user._id).select(
@@ -49,13 +54,13 @@ const registerUser = asyncHandler(async (req, res) => {
     if (!createdUser) {
         throw new ApiError(500, "something went wrong while registering the user")
     }
-    
+
     return res.status(201)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json(
-        new ApiResponse(200, {createdUser, refreshToken, accessToken}, "User registered Successfully")
-    )
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(
+            new ApiResponse(200, { createdUser, refreshToken, accessToken }, "User registered Successfully")
+        )
 
 });
 
@@ -85,7 +90,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: true
+        secure: process.env.NODE_ENV === "production"
     }
 
     return res.status(200)
@@ -113,7 +118,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: true
+        secure: process.env.NODE_ENV === "production"
     }
 
     return res.status(200)
@@ -121,11 +126,23 @@ const logoutUser = asyncHandler(async (req, res) => {
         .clearCookie("refreshToken", options)
         .json(
             new ApiResponse(200, {}, "User logged out")
-        )    
+        )
+})
+
+const checkLoginStatus = asyncHandler(async (req, res) => {
+    const user = req?.user;
+    if (!user) {
+        throw new ApiError(401, "Unauthorized access")
+    }
+    return res.status(200)
+        .json(
+            new ApiResponse(200, user, "User is Authorized or logged-in")
+        )
 })
 
 export {
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    checkLoginStatus
 }
