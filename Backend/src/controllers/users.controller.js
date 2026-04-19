@@ -15,10 +15,8 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false })
-        console.log("code ab phata");
-        
+        console.log("code ab phata");    
         return { accessToken, refreshToken }
-        console.log("nai ab phata");
     } catch (error) {
         throw new ApiError(500, "Error generating tokens")
     }

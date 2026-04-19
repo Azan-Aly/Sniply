@@ -4,7 +4,7 @@ import ShortenedOutput from './ShortenedOutput'
 import ShowOutput from './ShowOutput'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-
+import toast from 'react-hot-toast';
 
 
 const Hero = () => {
@@ -13,38 +13,48 @@ const Hero = () => {
   const { user, loading } = useAuth();
 
   const [response, setResponse] = useState()
-  
+
   const [longUrl, setLongUrl] = useState('')
   const [customAlias, setCustomAlias] = useState('')
   const [expiryDate, setExpiryDate] = useState('')
 
   const submitHandler = async (e) => {
     e.preventDefault();
-  const formData = {
-    originalUrl: longUrl,
-    customAlias: customAlias,
-    expiryDate: expiryDate
+    const formData = {
+      originalUrl: longUrl,
+      customAlias: customAlias,
+      expiryDate: expiryDate
+    };
+    if (loading) return;
+
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    try {
+      const response = await axios.post("http://localhost:3000/url/shorten", formData);
+
+      setResponse(response.data);
+      console.log("Success:", response.data);
+      toast.success("URL shortened successfully!");
+
+      setLongUrl('');
+      setCustomAlias('');
+      setExpiryDate('');
+
+    } catch (error) {
+      console.log(error.response)
+      const { message, field } = error?.response?.data?.data || {};
+      if (field === "customAlias") {
+        toast.error("Alias already taken. Try a different one.");
+      } else {
+        toast.error(message || "Something went wrong");
+        console.log(error)
+        console.log(message, field);
+      }
+    }
   };
-  if (loading) return;
 
-  if (!user) {
-    navigate("/login");
-    return;
-  }
-  try {
-    const response = await axios.post( "http://localhost:3000/url/shorten", formData);
-
-    setResponse(response.data);
-    console.log("Success:", response.data);
-
-    setLongUrl('');
-    setCustomAlias('');
-    setExpiryDate('');
-
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
 
   return (
     <div className='min-h-screen bg-linear-to-b from-white to-[#cffff0]'>
@@ -69,7 +79,7 @@ const Hero = () => {
               required
             />
             <input type="submit" value="Shorten"
-               className='bg-[#1D9E75] text-white cursor-pointer py-2 sm:py-3 px-4 sm:px-6 text-sm sm:text-base rounded-lg font-bold hover:bg-[#15774d] transition sm:w-auto w-full'
+              className='bg-[#1D9E75] text-white cursor-pointer py-2 sm:py-3 px-4 sm:px-6 text-sm sm:text-base rounded-lg font-bold hover:bg-[#15774d] transition sm:w-auto w-full'
             />
           </div>
 
@@ -109,7 +119,7 @@ const Hero = () => {
 
       <ShortenedOutput response={response} />
       {/* <ShowOutput /> */}
-      
+
     </div>
   )
 }

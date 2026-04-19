@@ -12,7 +12,6 @@ const urlSchema = new Schema(
         },
         shortId: {
             type: String,
-            unique: true,
             index: true
         },
         clicks: {

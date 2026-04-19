@@ -15,7 +15,9 @@ export const AuthProvider = ({ children }) => {
           withCredentials: true,
         });
 
-        setUser(res.data.user);
+        setUser(res.data.data);
+        console.log(user);
+        
         setLoggedIn(true);
 
       } catch (error) {

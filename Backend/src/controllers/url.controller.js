@@ -28,9 +28,13 @@ const shortenUrl = asyncHandler(async (req, res) => {
   let shortId;
 
   if (customAlias) {
-    const aliasExists = await URL.findOne({ shortId: customAlias });
+    const aliasExists = await URL.findOne({ shortId: customAlias, user: req.user._id });
     if (aliasExists) {
-      throw new ApiError(400, "Custom alias name already taken");
+      return res.status(400).json({
+        success: false,
+        message: "Custom alias already taken",
+        data: { field: "customAlias" }  // frontend reads error.response.data.data
+      });
     }
     shortId = customAlias;
   } else {
@@ -49,7 +53,7 @@ const shortenUrl = asyncHandler(async (req, res) => {
     shortId,
     shortUrl: `${req.protocol}://${req.get("host")}/${shortId}`,
     expiresAt: expiryDate || null,
-    user: req.user?._id || null
+    user: req.user._id || null
   });
 
   if (!newUrl) {
@@ -67,6 +71,8 @@ const shortenUrl = asyncHandler(async (req, res) => {
     )
   );
 });
+
+
 
 // REDIRECT
 const redirectUrl = asyncHandler(async (req, res) => {
