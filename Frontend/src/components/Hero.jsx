@@ -47,7 +47,11 @@ const Hero = () => {
       const { message, field } = error?.response?.data?.data || {};
       if (field === "customAlias") {
         toast.error("Alias already taken. Try a different one.");
-      } else {
+      } else if(field === "noAuth"){
+        toast.error("First login please")
+        navigate("/login")
+      }
+       else {
         toast.error(message || "Something went wrong");
         console.log(error)
         console.log(message, field);

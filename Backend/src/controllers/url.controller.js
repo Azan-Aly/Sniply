@@ -77,13 +77,13 @@ const shortenUrl = asyncHandler(async (req, res) => {
 // REDIRECT
 const redirectUrl = asyncHandler(async (req, res) => {
   const { code } = req.params;
-  console.log(code)
+  console.log(" ye raha code : ",code)
   if (!code) {
     throw new ApiError(400, "Short ID is required");
   }
 
   const url = await URL.findOne({ shortId: code });
-  console.log(url)
+  console.log(" ye raha url : ", url)
   if (!url) {
     throw new ApiError(404, "URL not found");
   }
