@@ -151,7 +151,7 @@ const checkLoginStatus = asyncHandler(async (req, res) => {
 
 
 
-const refreshToken = asyncHandler(async (req, res) => {
+const refreshingTokens = asyncHandler(async (req, res) => {
     try {
         const token =
             req.cookies?.refreshToken ||
@@ -203,5 +203,5 @@ export {
     loginUser,
     logoutUser,
     checkLoginStatus,
-    refreshToken
+    refreshingTokens
 }
