@@ -77,7 +77,7 @@ const shortenUrl = asyncHandler(async (req, res) => {
 // REDIRECT
 const redirectUrl = asyncHandler(async (req, res) => {
   const { code } = req.params;
-  console.log(" ye raha code : ",code)
+  
   if (!code) {
     throw new ApiError(400, "Short ID is required");
   }
@@ -97,7 +97,7 @@ const redirectUrl = asyncHandler(async (req, res) => {
     { $inc: { clicks: 1 } }
   );
 
-  return res.redirect(url.originalUrl);
+  return res.redirect(302, url.originalUrl);
 });
 
 

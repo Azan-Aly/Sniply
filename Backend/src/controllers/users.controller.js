@@ -15,12 +15,14 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false })
-        console.log("code ab phata");    
+
         return { accessToken, refreshToken }
     } catch (error) {
         throw new ApiError(500, "Error generating tokens")
     }
 }
+
+
 
 const registerUser = asyncHandler(async (req, res) => {
 
@@ -61,6 +63,7 @@ const registerUser = asyncHandler(async (req, res) => {
         )
 
 });
+
 
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -105,6 +108,8 @@ const loginUser = asyncHandler(async (req, res) => {
         )
 })
 
+
+
 const logoutUser = asyncHandler(async (req, res) => {
     const user = req.user
 
@@ -129,6 +134,9 @@ const logoutUser = asyncHandler(async (req, res) => {
         )
 })
 
+
+
+
 const checkLoginStatus = asyncHandler(async (req, res) => {
     const user = req?.user;
     if (!user) {
@@ -140,9 +148,60 @@ const checkLoginStatus = asyncHandler(async (req, res) => {
         )
 })
 
+
+
+
+const refreshToken = asyncHandler(async (req, res) => {
+    try {
+        const token =
+            req.cookies?.refreshToken ||
+            req.header("Authorization")?.replace("Bearer ", "");
+
+        if (!token) {
+            throw new ApiError(401, "Unauthorized request");
+        }
+
+        const decodedToken = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+
+        const user = await User.findById(decodedToken?._id);
+        if (!user || user.refreshToken !== token) {
+            throw new ApiError(401, "Invalid refresh token");
+        }
+
+        const { accessToken, refreshToken } =
+            await generateAccessAndRefreshTokens(user._id);
+
+        const options = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+        };
+
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken, options)
+            .cookie("refreshToken", refreshToken, options)
+            .json(
+                new ApiResponse(
+                    200,
+                    { accessToken, refreshToken },
+                    "Tokens refreshed successfully"
+                )
+            );
+    } catch (error) {
+        throw new ApiError(
+            error?.statusCode || 401,
+            error?.message || "Invalid access token"
+        );
+    }
+});
+
+
+
+
 export {
     registerUser,
     loginUser,
     logoutUser,
-    checkLoginStatus
+    checkLoginStatus,
+    refreshToken
 }
