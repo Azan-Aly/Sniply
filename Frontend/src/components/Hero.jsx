@@ -5,6 +5,7 @@ import ShowOutput from './ShowOutput'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import toast from 'react-hot-toast';
+import RefreshToken from '../context/RefreshToken';
 
 
 const Hero = () => {
@@ -123,7 +124,7 @@ const Hero = () => {
 
       <ShortenedOutput response={response} />
       {/* <ShowOutput /> */}
-
+      <RefreshToken />
     </div>
   )
 }
