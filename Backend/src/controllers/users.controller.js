@@ -45,7 +45,8 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production"
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 1000 * 24 * 60 * 60 * 7
     }
 
     const createdUser = await User.findById(user._id).select(
