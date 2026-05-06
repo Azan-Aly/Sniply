@@ -20,7 +20,7 @@ const shortenUrl = asyncHandler(async (req, res) => {
     return res.status(200).json(
       new ApiResponse(200, {
         shortId: existing.shortId,
-        shortUrl: `${req.protocol}://${req.get("host")}/${existing.shortId}`,
+        shortUrl: `${req.get("host")}/${existing.shortId}`,
       }, "URL already shortened")
     );
   }
