@@ -51,7 +51,7 @@ const shortenUrl = asyncHandler(async (req, res) => {
   const newUrl = await URL.create({
     originalUrl,
     shortId,
-    shortUrl: `${req.protocol}://${req.get("host")}/${shortId}`,
+    shortUrl: `${req.get("host")}/${shortId}`,
     expiresAt: expiryDate || null,
     user: req.user._id || null
   });
