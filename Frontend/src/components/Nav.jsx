@@ -23,8 +23,8 @@ const Nav = () => {
                         <Link to="/analytics">
                             <p className='sm:px-2 lg:px-4 py-2 rounded-full font-bold hover:bg-[#15c08a] cursor-pointer'>Analytics</p>
                         </Link>
-                        <Link to="/settings">
-                            <p className='sm:px-2 lg:px-4 py-2 rounded-full font-bold hover:bg-[#15c08a] cursor-pointer'>Settings</p>
+                        <Link to="/profile">
+                            <p className='sm:px-2 lg:px-4 py-2 rounded-full font-bold hover:bg-[#15c08a] cursor-pointer'>Profile</p>
                         </Link>
                     </>
                     : <>
