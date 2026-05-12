@@ -126,7 +126,7 @@ const Profile = () => {
                   className="h-64 w-64 rounded-full border-4 border-white object-cover shadow-xl"
                 />
               ) : (
-                <div className="flex h-64 w-64  items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-teal-500 text-5xl font-bold text-white shadow-xl">
+                <div className="flex h-64 w-64 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-teal-500 text-5xl font-bold text-white shadow-xl">
                   {initials}
                 </div>
               )}
