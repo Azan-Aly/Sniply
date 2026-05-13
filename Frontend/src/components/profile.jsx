@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   LogOut,
   Sparkles,
+  ImageUp
 } from 'lucide-react'
 
 const Profile = () => {
@@ -70,11 +71,11 @@ const Profile = () => {
 
   const initials = user.fullName
     ? user.fullName
-        .split(' ')
-        .map((part) => part[0])
-        .join('')
-        .slice(0, 2)
-        .toUpperCase()
+      .split(' ')
+      .map((part) => part[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase()
     : user.username?.slice(0, 2).toUpperCase()
 
   return (
@@ -93,7 +94,7 @@ const Profile = () => {
               </div>
 
               <h1 className="text-4xl font-extrabold tracking-tight text-white">
-                Welcome Back 👋
+                Heyy {user.username}
               </h1>
 
               <p className="mt-3 max-w-2xl text-white/90">
@@ -120,15 +121,29 @@ const Profile = () => {
             <div className="flex flex-col items-center text-center">
 
               {user.avatar ? (
-                <img
-                  src={user.avatar}
-                  alt="Profile"
-                  className="h-64 w-64 rounded-full border-4 border-white object-cover shadow-xl"
-                />
+                <>
+                  <img
+                    src={user.avatar}
+                    alt="Profile"
+                    className="h-64 w-64 rounded-full border-4 border-white object-cover shadow-xl"
+                  />
+                  <p><ImageUp /></p>
+                </>
               ) : (
-                <div className="flex h-64 w-64 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-teal-500 text-5xl font-bold text-white shadow-xl">
-                  {initials}
-                </div>
+                <>
+                  <div className='relative'>
+                    <div className="flex  h-64 w-64 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-teal-500 text-5xl font-bold text-white shadow-xl">
+                      {initials}
+                    </div>
+                    <p className='absolute -bottom-2 right-14 h-12 w-12 rounded-full bg-gray-50 flex items-center justify-center cursor-pointer'>
+                      <label htmlFor="profile">
+                      <ImageUp />
+
+                      </label>
+                      <input type="file" name="profile" id="profile" className='hidden' />
+                    </p>
+                  </div>
+                </>
               )}
 
               <h2 className="mt-6 text-3xl font-bold text-slate-800">
