@@ -6,6 +6,7 @@ import ShowOutput from './components/ShowOutput';
 import Register from './components/Register';
 import Login from './components/Login';
 import Profile from './components/profile';
+import Analytics from './components/Analytics';
 import { Toaster } from "react-hot-toast";
 import axios from 'axios';
 
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<Hero />} />
           <Route path="dashboard" element={<ShowOutput />} />
+          <Route path="analytics" element={<Analytics />} />
           <Route path="profile" element={<Profile />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />

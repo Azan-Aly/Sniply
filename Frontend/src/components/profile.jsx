@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import toast from 'react-hot-toast'
@@ -16,8 +16,12 @@ const Profile = () => {
   const navigate = useNavigate()
   const { user, setUser, setLoggedIn, loading } = useAuth()
 
+  const [uploading, setUploading] = useState(false)
+  const [loggingOut, setLoggingOut] = useState(false)
+
   const handleLogout = async () => {
     try {
+      setLoggingOut(true)
       await axios.post('http://localhost:3000/api/v1/users/logout')
 
       setUser(null)
@@ -28,7 +32,45 @@ const Profile = () => {
     } catch (error) {
       console.error(error)
       toast.error('Unable to logout')
+    } finally {
+      setLoggingOut(false)
     }
+  }
+
+  const uploadAvatar = async (file) => {
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append('avatar', file)
+
+    try {
+      setUploading(true)
+      const response = await axios.post(
+        'http://localhost:3000/api/v1/users/avatar',
+        formData,
+        {
+          withCredentials: true
+        }
+      )
+
+      if (response?.data?.data) {
+        setUser(response.data.data)
+      }
+
+      toast.success('Avatar uploaded successfully')
+    } catch (error) {
+      console.error(error)
+      toast.error('Unable to upload the profile picture')
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    await uploadAvatar(file)
   }
 
   if (loading) {
@@ -105,10 +147,20 @@ const Profile = () => {
 
             <button
               onClick={handleLogout}
-              className="flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3 font-semibold text-slate-800 shadow-lg transition-all duration-300 hover:scale-105"
+              disabled={loggingOut}
+              className="flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3 font-semibold text-slate-800 shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <LogOut size={18} />
-              Logout
+              {loggingOut ? (
+                <>
+                  <div className="h-4 w-4 rounded-full border-2 border-slate-800 border-t-transparent animate-spin"></div>
+                  Logging out...
+                </>
+              ) : (
+                <>
+                  <LogOut size={18} />
+                  Logout
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -122,12 +174,29 @@ const Profile = () => {
 
               {user.avatar ? (
                 <>
-                  <img
-                    src={user.avatar}
-                    alt="Profile"
-                    className="h-64 w-64 rounded-full border-4 border-white object-cover shadow-xl"
-                  />
-                  <p><ImageUp /></p>
+                  <div className='relative'>
+                    <img
+                      src={user.avatar}
+                      alt="Profile"
+                      className="h-64 w-64 rounded-full border-4 border-white object-cover shadow-xl"
+                    />
+                    <label htmlFor="avatar" className='absolute bottom-0 right-0 m-3 rounded-full bg-white p-2 text-slate-700 shadow-md transition hover:bg-emerald-50 hover:text-emerald-600 cursor-pointer disabled:opacity-50'>
+                      {uploading ? (
+                        <div className="h-6 w-6 rounded-full border-2 border-slate-700 border-t-transparent animate-spin"></div>
+                      ) : (
+                        <ImageUp />
+                      )}
+                    </label>
+                    <input
+                      type="file"
+                      id="avatar"
+                      name="avatar"
+                      accept="image/*"
+                      onChange={handleAvatarChange}
+                      disabled={uploading}
+                      className="hidden"
+                    />
+                  </div>
                 </>
               ) : (
                 <>
@@ -135,12 +204,23 @@ const Profile = () => {
                     <div className="flex  h-64 w-64 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-teal-500 text-5xl font-bold text-white shadow-xl">
                       {initials}
                     </div>
-                    <p className='absolute -bottom-2 right-14 h-12 w-12 rounded-full bg-gray-50 flex items-center justify-center cursor-pointer'>
-                      <label htmlFor="profile">
-                      <ImageUp />
-
+                    <p className='absolute -bottom-2 right-14 h-12 w-12 rounded-full bg-gray-50 flex items-center justify-center'>
+                      <label htmlFor="avatar" className="cursor-pointer p-2 text-slate-700 hover:text-emerald-600">
+                        {uploading ? (
+                          <div className="h-6 w-6 rounded-full border-2 border-slate-700 border-t-transparent animate-spin"></div>
+                        ) : (
+                          <ImageUp />
+                        )}
                       </label>
-                      <input type="file" name="profile" id="profile" className='hidden' />
+                      <input
+                        type="file"
+                        id="avatar"
+                        name="avatar"
+                        accept="image/*"
+                        onChange={handleAvatarChange}
+                        disabled={uploading}
+                        className="hidden"
+                      />
                     </p>
                   </div>
                 </>
