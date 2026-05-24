@@ -28,6 +28,7 @@ export const getStats = asyncHandler(async (req, res) => {
         today.setHours(0, 0, 0, 0);
 
         const activeToday = await URL.countDocuments({
+            user: req.user._id,
             createdAt: { $gte: today }
         });
 

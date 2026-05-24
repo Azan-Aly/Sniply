@@ -28,7 +28,8 @@ const shortenUrl = asyncHandler(async (req, res) => {
   let shortId;
 
   if (customAlias) {
-    const aliasExists = await URL.findOne({ shortId: customAlias, user: req.user._id });
+    // Perform a global search to prevent duplicate aliases across different users
+    const aliasExists = await URL.findOne({ shortId: customAlias });
     if (aliasExists) {
       return res.status(400).json({
         success: false,
