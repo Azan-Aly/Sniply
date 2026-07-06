@@ -87,7 +87,7 @@ const Profile = () => {
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">
-        <div className="w-full max-w-md rounded-4xl bg-white p-8 shadow-2xl text-center">
+        <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl text-center">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100">
             <User className="text-emerald-600" size={40} />
           </div>
@@ -122,7 +122,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-100 via-white to-emerald-50 px-4 py-10">
-      <div className="mx-auto max-w-6xl overflow-hidden rounded-[40px] bg-white shadow-[0_10px_60px_rgba(0,0,0,0.08)]">
+      <div className="mx-auto max-w-7xl overflow-hidden rounded-[18px] bg-white shadow-[0_10px_60px_rgba(0,0,0,0.08)]">
 
         {/* Top Banner */}
         <div className="relative overflow-hidden bg-linear-to-r from-emerald-500 to-teal-500 px-8 py-12">

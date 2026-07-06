@@ -159,7 +159,7 @@ const ShowOutput = ({ refreshTrigger }) => {
                   <div className='flex items-center gap-3 lg:gap-2 flex-wrap lg:flex-col lg:justify-end'>
                     <button
                       onClick={() => copyLink(link.shortId)}
-                      className='flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2.5 font-semibold transition-all duration-300 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg'
+                      className='flex items-center justify-center gap-2 rounded-2xl text-emerald-500 hover:bg-emerald-100 px-4 py-2.5 font-semibold transition-all duration-300 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg'
                       title='Copy link'
                     >
                       {copiedId === link.shortId ? (
@@ -178,7 +178,7 @@ const ShowOutput = ({ refreshTrigger }) => {
                     <button
                       onClick={() => deleteLink(link.shortId)}
                       disabled={deletingId === link.shortId}
-                      className='flex items-center justify-center gap-2 rounded-2xl bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 font-semibold transition-all duration-300 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed'
+                      className='flex items-center justify-center gap-2 rounded-2xl text-red-500 hover:bg-red-100 px-4 py-2.5 font-semibold transition-all duration-300 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed'
                       title='Delete link'
                     >
                       {deletingId === link.shortId ? (
