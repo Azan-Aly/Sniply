@@ -3,7 +3,7 @@ import axiosActual from 'axios'
 import ShortenedOutput from './ShortenedOutput'
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import RefreshToken from '../context/RefreshToken';
 import { 
   Link2, 

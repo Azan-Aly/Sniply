@@ -1,8 +1,13 @@
+import path from "path";
+import { fileURLToPath } from "url";
 import { URL } from "../models/url.model.js";
 import { urlGenerate } from "../services/urlGen.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 const shortenUrl = asyncHandler(async (req, res) => {
@@ -78,19 +83,22 @@ const shortenUrl = asyncHandler(async (req, res) => {
 // REDIRECT
 const redirectUrl = asyncHandler(async (req, res) => {
   const { code } = req.params;
-  
+
   if (!code) {
     throw new ApiError(400, "Short ID is required");
   }
 
   const url = await URL.findOne({ shortId: code });
-  console.log(" ye raha url : ", url)
+
+  // console.log(" ye raha url : ", url)
+  
   if (!url) {
     throw new ApiError(404, "URL not found");
   }
 
   if (url.expiresAt && url.expiresAt < new Date()) {
-    throw new ApiError(410, "URL has expired");
+    const expiredPage = path.resolve(__dirname, "../../public/expired.html");
+    return res.status(410).sendFile(expiredPage);
   }
 
   await URL.updateOne(

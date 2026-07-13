@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from "../context/AuthContext";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' })
@@ -35,8 +35,12 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-180 flex items-center justify-center bg-linear-to-br from-green-100 to-emerald-100 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 sm:p-8">
+    <div className="min-h-140 flex items-center justify-center bg-slate-200 px-4 relative overflow-hidden">
+      {/* Decorative Background Glows — same as homepage */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-100/40 rounded-full blur-3xl -translate-y-1/2 pointer-events-none"></div>
+      <div className="absolute top-[20%] right-1/4 w-[400px] h-[400px] bg-teal-100/30 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 sm:p-8 relative z-10">
         <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">Welcome Back</h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -90,3 +94,4 @@ const Login = () => {
 }
 
 export default Login
+

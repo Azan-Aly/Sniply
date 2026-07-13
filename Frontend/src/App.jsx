@@ -7,14 +7,14 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Profile from './components/profile';
 import Analytics from './components/Analytics';
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 import axios from 'axios';
 
 const App = () => {
   axios.defaults.withCredentials = true;
   return (
     <div className='min-h-screen w-full overflow-x-hidden'>
-      <Toaster position="top-right" />
+      <Toaster position="top-right" richColors closeButton />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Hero />} />
