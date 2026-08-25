@@ -8,7 +8,7 @@ import { toast } from "sonner";
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' })
   const navigate = useNavigate()
-  const { loggedIn, setLoggedIn, checkAuth } = useAuth()
+  const { setLoggedIn, checkAuth } = useAuth()
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })

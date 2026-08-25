@@ -232,7 +232,7 @@ const Analytics = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentLinks.map((link, index) => (
+                  {recentLinks.map((link) => (
                     <tr
                       key={link.shortId}
                       className="border-b border-slate-100 hover:bg-slate-50 transition-colors"

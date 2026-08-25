@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         
         setLoggedIn(true);
 
-      } catch (error) {
+      } catch {
         setUser(null);
         setLoggedIn(false);
       } finally {
@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -40,4 +41,5 @@ export const AuthProvider = ({ children }) => {
 };
 
 // custom hook 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);

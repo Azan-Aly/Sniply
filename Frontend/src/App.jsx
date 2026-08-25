@@ -10,8 +10,9 @@ import Analytics from './components/Analytics';
 import { Toaster } from "sonner";
 import axios from 'axios';
 
+axios.defaults.withCredentials = true;
+
 const App = () => {
-  axios.defaults.withCredentials = true;
   return (
     <div className='min-h-screen w-full overflow-x-hidden'>
       <Toaster position="top-right" richColors closeButton />
