@@ -15,10 +15,11 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/Backend/api/index.js" },
-    { "src": "/assets/(.*)", "dest": "/Frontend/dist/assets/$1" },
-    { "src": "/favicon.ico", "dest": "/Frontend/dist/favicon.ico" },
-    { "src": "/(dashboard|analytics|profile|register|login)", "dest": "/Frontend/dist/index.html" },
-    { "src": "/", "dest": "/Frontend/dist/index.html" },
+    { "src": "/([^/]+\\.[^/]+)", "dest": "/Frontend/$1" },
+    { "src": "/assets/(.*)", "dest": "/Frontend/assets/$1" },
+    { "src": "/favicon.ico", "dest": "/Frontend/favicon.ico" },
+    { "src": "/(dashboard|analytics|profile|register|login)", "dest": "/Frontend/index.html" },
+    { "src": "/", "dest": "/Frontend/index.html" },
     { "src": "/(.*)", "dest": "/Backend/api/index.js" }
   ]
 }
