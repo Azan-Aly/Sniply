@@ -1,11 +1,8 @@
 import app from "../app.js";
 import { connectDB } from "../src/db/db.js";
 
-// Vercel serverless function entry point
-export default async function handler(req, res) {
-  // Ensure DB connection is established before handling request
-  await connectDB();
+// Initialize database connection
+connectDB().catch(err => console.error("DB Connection Error on Vercel:", err));
 
-  // Delegate request to Express app
-  return app(req, res);
-}
+// Export the Express app directly for Vercel Serverless
+export default app;
