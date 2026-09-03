@@ -28,6 +28,12 @@ export const errorHandler = (err, req, res, next) => {
         error = new ApiError(statusCode, message, errors, err.stack);
     }
 
+    // Log the error for deployment debugging (Vercel runtime logs)
+    console.error(`[ERROR] ${req.method} ${req.url} - ${error.message}`);
+    if (process.env.NODE_ENV !== "development") {
+        console.error(error.stack);
+    }
+
     const response = {
         statusCode: error.statusCode,
         success: false,
