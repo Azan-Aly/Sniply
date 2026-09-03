@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import { urlApi } from '../services/api'
 import { Link, MousePointer2, MonitorCheck } from 'lucide-react'
 
 const Score = () => {
   const [data, setData] = useState({});
   const getStats = async () => {
     try{
-      const response = await axios.get("http://localhost:3000/url/stats")
+      const response = await urlApi.getStats()
       // console.log("Stats:", response.data.data);
       setData(response.data.data);
     } catch (error) {

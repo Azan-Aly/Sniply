@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import { urlApi } from '../services/api'
 import { toast } from 'sonner'
 import {
   BarChart,
@@ -34,8 +34,8 @@ const Analytics = () => {
       try {
         setLoading(true)
         const [statsRes, linksRes] = await Promise.all([
-          axios.get('http://localhost:3000/url/stats'),
-          axios.get('http://localhost:3000/url/recent')
+          urlApi.getStats(),
+          urlApi.getRecent()
         ])
 
         setStats(statsRes.data.data)

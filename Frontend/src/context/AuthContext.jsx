@@ -1,45 +1,94 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
+import { userApi } from "../services/api";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
 
-  // Check user on first load
+  // Check user authentication status on load
   const checkAuth = async () => {
     try {
-        const res = await axios.get("http://localhost:3000/api/v1/users/me", {
-          withCredentials: true,
-        });
-
+      setLoading(true);
+      const res = await userApi.getMe();
+      if (res?.data?.data) {
         setUser(res.data.data);
-        console.log(user);
-        
         setLoggedIn(true);
-
-      } catch {
+        return res.data.data;
+      } else {
         setUser(null);
         setLoggedIn(false);
-      } finally {
-        setLoading(false);
+        return null;
       }
-    };
+    } catch {
+      setUser(null);
+      setLoggedIn(false);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const login = async (credentials) => {
+    const res = await userApi.login(credentials);
+    const userData = res.data?.data?.user;
+    if (userData) {
+      setUser(userData);
+      setLoggedIn(true);
+    }
+    return res;
+  };
+
+  const register = async (userData) => {
+    const res = await userApi.register(userData);
+    const newUser = res.data?.data?.user;
+    if (newUser) {
+      setUser(newUser);
+      setLoggedIn(true);
+    }
+    return res;
+  };
+
+  const logout = async () => {
+    try {
+      await userApi.logout();
+    } finally {
+      setUser(null);
+      setLoggedIn(false);
+    }
+  };
 
   useEffect(() => {
     checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, loggedIn, setLoggedIn, checkAuth }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        loading,
+        loggedIn,
+        setLoggedIn,
+        checkAuth,
+        login,
+        register,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-// custom hook 
+// Custom hook
 // eslint-disable-next-line react-refresh/only-export-components
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};

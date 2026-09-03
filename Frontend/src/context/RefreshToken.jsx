@@ -1,21 +1,3 @@
-import React, { useEffect } from 'react'
-import axios from 'axios'
-const RefreshToken = () => {
-
-    const refreshingTokens = async () => {
-        const response = await axios.get("http:localhost/api/v1/users/refresh")
-        console.log(response.data) 
-    }
-    useEffect(() => {
-      refreshingTokens()
-
-    }, [])
-    
-  return (
-    <div>
-        
-    </div>
-  )
-}
-
-export default RefreshToken
+// Deprecated: Token refreshing is now automatically handled via src/services/api.js interceptors
+const RefreshToken = () => null;
+export default RefreshToken;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import { userApi } from '../services/api'
 import { toast } from 'sonner'
 import { useAuth } from '../context/AuthContext'
 import {
@@ -22,7 +22,7 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       setLoggingOut(true)
-      await axios.post('http://localhost:3000/api/v1/users/logout')
+      await userApi.logout()
 
       setUser(null)
       setLoggedIn(false)
@@ -45,13 +45,7 @@ const Profile = () => {
 
     try {
       setUploading(true)
-      const response = await axios.post(
-        'http://localhost:3000/api/v1/users/avatar',
-        formData,
-        {
-          withCredentials: true
-        }
-      )
+      const response = await userApi.updateAvatar(formData)
 
       if (response?.data?.data) {
         setUser(response.data.data)

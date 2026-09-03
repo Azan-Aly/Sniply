@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
-import axiosActual from 'axios'
-import ShortenedOutput from './ShortenedOutput'
+import React, { useState } from 'react';
+import ShortenedOutput from './ShortenedOutput';
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from 'sonner';
-import RefreshToken from '../context/RefreshToken';
+import { urlApi } from '../services/api';
 import { 
   Link2, 
   Sparkles, 
@@ -20,59 +19,48 @@ import {
 } from 'lucide-react';
 
 const Hero = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { user, loading } = useAuth();
 
-  const [response, setResponse] = useState()
-  const [longUrl, setLongUrl] = useState('')
-  const [customAlias, setCustomAlias] = useState('')
-  const [expiryDate, setExpiryDate] = useState('')
+  const [response, setResponse] = useState(null);
+  const [longUrl, setLongUrl] = useState('');
+  const [customAlias, setCustomAlias] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const formData = {
-      originalUrl: longUrl,
-      customAlias: customAlias,
-      expiryDate: expiryDate
-    };
     if (loading) return;
 
     if (!user) {
-      toast.error("Please login to shorten links!");
+      toast.error("Please login first to shorten links!");
       navigate("/login");
       return;
     }
+
+    const formData = {
+      originalUrl: longUrl.trim(),
+      customAlias: customAlias.trim() || undefined,
+      expiryDate: expiryDate || undefined
+    };
     
     setIsSubmitting(true);
     try {
-      const response = await axiosActual.post("http://localhost:3000/url/shorten", formData);
-
-      setResponse(response.data);
-      console.log("Success:", response.data);
-      toast.success("URL shortened successfully!");
+      const res = await urlApi.shorten(formData);
+      setResponse(res.data);
+      toast.success(res.data?.message || "URL shortened successfully!");
 
       setLongUrl('');
       setCustomAlias('');
       setExpiryDate('');
-
     } catch (error) {
-      console.log(error.response)
-      const { message, field } = error?.response?.data?.data || {};
-      if (field === "customAlias") {
-        toast.error("Alias already taken. Try a different one.");
-      } else if(field === "noAuth"){
-        toast.error("First login please")
-        navigate("/login")
-      }
-       else {
-        toast.error(message || "Something went wrong");
-        console.log(error)
-      }
+      const errorMsg = error?.response?.data?.message || "Something went wrong while shortening the URL";
+      toast.error(errorMsg);
     } finally {
       setIsSubmitting(false);
     }
   };
+
 
   return (
     <div className='min-h-screen bg-slate-50 relative overflow-hidden font-sans'>
@@ -460,8 +448,6 @@ const Hero = () => {
           </div>
         </div>
       </div>
-
-      <RefreshToken />
     </div>
   )
 }

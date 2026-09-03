@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import { urlApi } from '../services/api'
 import { toast } from 'sonner'
 import {
   Trash2,
@@ -22,7 +22,7 @@ const ShowOutput = ({ refreshTrigger }) => {
   const fetchRecentLinks = async () => {
     try {
       setLoading(true)
-      const response = await axios.get('http://localhost:3000/url/recent')
+      const response = await urlApi.getRecent()
       setRecentLinks(response.data.data)
     } catch (error) {
       console.error('Error fetching recent links:', error)
@@ -39,7 +39,7 @@ const ShowOutput = ({ refreshTrigger }) => {
   const deleteLink = async (shortId) => {
     try {
       setDeletingId(shortId)
-      await axios.delete(`http://localhost:3000/url/${shortId}`)
+      await urlApi.deleteUrl(shortId)
       setRecentLinks(prev =>
         prev.filter(link => link.shortId !== shortId)
       )
@@ -55,7 +55,7 @@ const ShowOutput = ({ refreshTrigger }) => {
   const copyLink = (shortId) => {
     const linkToCopy = recentLinks.find(link => link.shortId === shortId)
     if (linkToCopy) {
-      const fullShortUrl = `http://localhost:3000/${linkToCopy.shortId}`
+      const fullShortUrl = linkToCopy.shortUrl || `${window.location.origin}/${linkToCopy.shortId}`
 
       navigator.clipboard.writeText(fullShortUrl).then(() => {
         setCopiedId(shortId)
@@ -112,7 +112,7 @@ const ShowOutput = ({ refreshTrigger }) => {
                         <Link2 size={20} />
                       </div>
                       <a
-                        href={`http://localhost:3000/${link.shortId}`}
+                        href={link.shortUrl || `${window.location.origin}/${link.shortId}`}
                         target='_blank'
                         rel='noopener noreferrer'
                         className='text-emerald-600 font-bold font-mono text-lg hover:text-emerald-700 hover:underline transition-colors'

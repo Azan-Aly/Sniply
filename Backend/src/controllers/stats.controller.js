@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { URL } from "../models/url.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -5,13 +6,15 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const getStats = asyncHandler(async (req, res) => {
     try {
+        const userObjectId = new mongoose.Types.ObjectId(String(req.user._id));
+
         const totalLinks = await URL.countDocuments({
-            user: req.user._id
+            user: userObjectId
         });
 
         const totalClicksAgg = await URL.aggregate([
             {
-                $match: { user: req.user._id }
+                $match: { user: userObjectId }
             },
             {
                 $group: {
@@ -28,21 +31,21 @@ export const getStats = asyncHandler(async (req, res) => {
         today.setHours(0, 0, 0, 0);
 
         const activeToday = await URL.countDocuments({
-            user: req.user._id,
+            user: userObjectId,
             createdAt: { $gte: today }
         });
 
-        return res.status(200)
-            .json(
-                new ApiResponse(200, {
-                    totalLinks,
-                    clicks: totalClicks,
-                    activeToday
-                }));
-
+        return res.status(200).json(
+            new ApiResponse(200, {
+                totalLinks,
+                clicks: totalClicks,
+                activeToday
+            }, "Stats fetched successfully")
+        );
     } catch (err) {
-        console.error(err);
-        throw new ApiError(500, "Error fetching stats");
+        console.error("Error fetching stats:", err);
+        throw new ApiError(500, "Error fetching user link statistics");
     }
 });
+
 
