@@ -1,6 +1,6 @@
 import "dotenv/config";
 import app from "./app.js";
-import { connectDB, disconnectDB } from "./db/db.js";
+import { connectDB, disconnectDB } from "./src/db/db.js";
 
 let server;
 

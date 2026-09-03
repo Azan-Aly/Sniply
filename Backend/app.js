@@ -1,11 +1,11 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { errorHandler } from "./middlewares/error.middleware.js";
+import { errorHandler } from "./src/middlewares/error.middleware.js";
 
 // routes import
-import userRouter from "./routes/user.route.js";
-import urlRouter from "./routes/url.route.js";
+import userRouter from "./src/routes/user.route.js";
+import urlRouter from "./src/routes/url.route.js";
 
 const app = express();
 app.set("trust proxy", 1);
