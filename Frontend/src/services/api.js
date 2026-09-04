@@ -24,6 +24,18 @@ const processQueue = (error) => {
   failedQueue = [];
 };
 
+// Request interceptor to attach Bearer token if available in localStorage
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+    if (token && !config.headers.Authorization) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 // Response interceptor to handle token refreshing seamlessly on 401
 apiClient.interceptors.response.use(
   (response) => response,
@@ -50,10 +62,18 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await apiClient.get("/api/v1/users/refresh");
+        const refreshRes = await apiClient.get("/api/v1/users/refresh");
+        const newAccessToken = refreshRes?.data?.data?.accessToken;
+        if (newAccessToken && typeof window !== "undefined") {
+          localStorage.setItem("accessToken", newAccessToken);
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        }
         processQueue(null);
         return apiClient(originalRequest);
       } catch (refreshError) {
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("accessToken");
+        }
         processQueue(refreshError);
         return Promise.reject(refreshError);
       } finally {

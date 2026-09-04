@@ -49,6 +49,8 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 }
 
 userSchema.methods.generateAccessToken = async function () {
+    const secret = process.env.ACCESS_TOKEN_SECRET || "sniply_jwt_access_secret_fallback_2025";
+    const expiry = process.env.ACCESS_TOKEN_EXPIRY || "1d";
     return jwt.sign(
         {
             _id: this._id,
@@ -56,22 +58,23 @@ userSchema.methods.generateAccessToken = async function () {
             email: this.email,
             fullName: this.fullName,
         },
-        process.env.ACCESS_TOKEN_SECRET,
+        secret,
         {
-            expiresIn: process.env.ACCESS_TOKEN_EXPIRY
+            expiresIn: expiry
         }
     )
 }
 
 userSchema.methods.generateRefreshToken = async function () {
+    const secret = process.env.REFRESH_TOKEN_SECRET || "sniply_jwt_refresh_secret_fallback_2025";
+    const expiry = process.env.REFRESH_TOKEN_EXPIRY || "7d";
     return jwt.sign(
         {
             _id: this._id,
-            
         },
-        process.env.REFRESH_TOKEN_SECRET,
+        secret,
         {
-            expiresIn: process.env.REFRESH_TOKEN_EXPIRY
+            expiresIn: expiry
         }
     )
 }

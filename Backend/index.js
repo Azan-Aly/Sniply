@@ -7,22 +7,25 @@ let server;
 // Handle uncaught exceptions FIRST
 process.on("uncaughtException", (err) => {
     console.error("Uncaught Exception:", err);
-    process.exit(1);
+    if (!process.env.VERCEL) {
+        process.exit(1);
+    }
 });
 
-connectDB()
-    .then(() => {
-        const PORT = process.env.PORT || 8000;
-        if (!process.env.VERCEL) {
+// Start listening and connect DB when running locally (not in Vercel serverless)
+if (!process.env.VERCEL) {
+    connectDB()
+        .then(() => {
+            const PORT = process.env.PORT || 8000;
             server = app.listen(PORT, () => {
                 console.log(`Sniply backend is running on http://localhost:${PORT}`);
             });
-        }
-    })
-    .catch((err) => {
-        console.error("Error connecting to DB:", err);
-        process.exit(1);
-    });
+        })
+        .catch((err) => {
+            console.error("Error connecting to DB locally:", err);
+            process.exit(1);
+        });
+}
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err) => {
@@ -33,7 +36,7 @@ process.on("unhandledRejection", (err) => {
             await disconnectDB();
             process.exit(1);
         });
-    } else {
+    } else if (!process.env.VERCEL) {
         process.exit(1);
     }
 });

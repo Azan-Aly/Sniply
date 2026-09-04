@@ -34,6 +34,10 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     const res = await userApi.login(credentials);
     const userData = res.data?.data?.user;
+    const token = res.data?.data?.accessToken;
+    if (token && typeof window !== "undefined") {
+      localStorage.setItem("accessToken", token);
+    }
     if (userData) {
       setUser(userData);
       setLoggedIn(true);
@@ -44,6 +48,10 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     const res = await userApi.register(userData);
     const newUser = res.data?.data?.user;
+    const token = res.data?.data?.accessToken;
+    if (token && typeof window !== "undefined") {
+      localStorage.setItem("accessToken", token);
+    }
     if (newUser) {
       setUser(newUser);
       setLoggedIn(true);
@@ -55,6 +63,9 @@ export const AuthProvider = ({ children }) => {
     try {
       await userApi.logout();
     } finally {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("accessToken");
+      }
       setUser(null);
       setLoggedIn(false);
     }

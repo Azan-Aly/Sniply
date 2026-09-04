@@ -74,7 +74,7 @@ const Hero = () => {
           {/* Announcement pill */}
           <div className='inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-100 px-3.5 py-1.5 text-xs font-semibold text-emerald-800 mb-6 hover:bg-emerald-100/60 transition-colors duration-200 cursor-default'>
             <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
-            <span>✨ Sniply 2.0 is live! Customize and Track links</span>
+            <span> Sniply 2.0 is live! Customize and Track links</span>
           </div>
 
           <h1 className='text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight text-slate-900 leading-tight sm:leading-none mb-6'>

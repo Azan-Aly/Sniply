@@ -5,6 +5,16 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { uploadOnCloudinary, deleteFromCloudinary, extractPublicIdFromUrl } from "../utils/cloudinary.utils.js";
 
+const isProduction = process.env.NODE_ENV === "production" || process.env.VERCEL === "1";
+
+const getCookieOptions = () => ({
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 1000 * 24 * 60 * 60 * 7
+});
+
 const generateAccessAndRefreshTokens = async (userId) => {
     try {
         const user = await User.findById(userId);
@@ -20,8 +30,9 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
         return { accessToken, refreshToken };
     } catch (error) {
+        console.error("Error generating tokens:", error);
         if (error instanceof ApiError) throw error;
-        throw new ApiError(500, "Error generating authentication tokens");
+        throw new ApiError(500, error.message || "Error generating authentication tokens");
     }
 };
 
@@ -51,12 +62,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const { refreshToken, accessToken } = await generateAccessAndRefreshTokens(user._id);
 
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: 1000 * 24 * 60 * 60 * 7
-    };
+    const options = getCookieOptions();
 
     const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
@@ -103,12 +109,7 @@ const loginUser = asyncHandler(async (req, res) => {
         "-password -refreshToken"
     );
 
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: 1000 * 24 * 60 * 60 * 7
-    };
+    const options = getCookieOptions();
 
     return res
         .status(200)
@@ -136,11 +137,7 @@ const logoutUser = asyncHandler(async (req, res) => {
         );
     }
 
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
-    };
+    const options = getCookieOptions();
 
     return res
         .status(200)
@@ -169,7 +166,8 @@ const refreshingTokens = asyncHandler(async (req, res) => {
             throw new ApiError(401, "Unauthorized request: No refresh token provided");
         }
 
-        const decodedToken = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+        const secret = process.env.REFRESH_TOKEN_SECRET || "sniply_jwt_refresh_secret_fallback_2025";
+        const decodedToken = jwt.verify(token, secret);
 
         const user = await User.findById(decodedToken?._id);
         if (!user || user.refreshToken !== token) {
@@ -179,12 +177,7 @@ const refreshingTokens = asyncHandler(async (req, res) => {
         const { accessToken, refreshToken } =
             await generateAccessAndRefreshTokens(user._id);
 
-        const options = {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-            maxAge: 1000 * 24 * 60 * 60 * 7
-        };
+        const options = getCookieOptions();
 
         return res
             .status(200)
