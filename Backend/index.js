@@ -1,7 +1,7 @@
-import "dotenv/config";
+import dotenv from "dotenv"
 import app from "./app.js";
 import { connectDB, disconnectDB } from "./src/db/db.js";
-
+dotenv.config()
 let server;
 
 // Handle uncaught exceptions FIRST
