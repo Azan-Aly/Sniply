@@ -13,9 +13,11 @@ process.on("uncaughtException", (err) => {
 connectDB()
     .then(() => {
         const PORT = process.env.PORT || 8000;
-        server = app.listen(PORT, () => {
-            console.log(`Sniply backend is running on http://localhost:${PORT}`);
-        });
+        if (!process.env.VERCEL) {
+            server = app.listen(PORT, () => {
+                console.log(`Sniply backend is running on http://localhost:${PORT}`);
+            });
+        }
     })
     .catch((err) => {
         console.error("Error connecting to DB:", err);
@@ -63,3 +65,5 @@ process.on("SIGINT", () => {
         process.exit(0);
     }
 });
+
+export default app;
