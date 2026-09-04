@@ -52,10 +52,17 @@ const ShowOutput = ({ refreshTrigger }) => {
     }
   }
 
+  const getDisplayUrl = (link) => {
+    if (typeof window !== 'undefined' && link?.shortId) {
+      return `${window.location.origin}/${link.shortId}`
+    }
+    return link?.shortUrl || ''
+  }
+
   const copyLink = (shortId) => {
     const linkToCopy = recentLinks.find(link => link.shortId === shortId)
     if (linkToCopy) {
-      const fullShortUrl = linkToCopy.shortUrl || `${window.location.origin}/${linkToCopy.shortId}`
+      const fullShortUrl = getDisplayUrl(linkToCopy)
 
       navigator.clipboard.writeText(fullShortUrl).then(() => {
         setCopiedId(shortId)
@@ -112,12 +119,12 @@ const ShowOutput = ({ refreshTrigger }) => {
                         <Link2 size={20} />
                       </div>
                       <a
-                        href={link.shortUrl || `${window.location.origin}/${link.shortId}`}
+                        href={getDisplayUrl(link)}
                         target='_blank'
                         rel='noopener noreferrer'
                         className='text-emerald-600 font-bold font-mono text-lg hover:text-emerald-700 hover:underline transition-colors'
                       >
-                        {link.shortUrl}
+                        {getDisplayUrl(link)}
                       </a>
                       <ExternalLink size={16} className='text-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity' />
                     </div>

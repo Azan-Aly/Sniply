@@ -35,8 +35,28 @@ const normalizeUrl = (urlStr) => {
 };
 
 const formatShortUrl = (req, shortId) => {
-  const protocol = req.headers["x-forwarded-proto"] || req.protocol || "http";
-  const host = req.get("host") || "localhost:3000";
+  // 1. Prefer client origin header if not localhost (e.g. https://sniply.vercel.app)
+  if (req?.headers?.origin && !req.headers.origin.includes("localhost")) {
+    return `${req.headers.origin}/${shortId}`;
+  }
+
+  // 2. Prefer Vercel / proxy forwarded host if not localhost
+  const forwardedHost = req?.headers?.["x-forwarded-host"];
+  if (forwardedHost && !forwardedHost.includes("localhost")) {
+    const protocol = req.headers?.["x-forwarded-proto"] || "https";
+    return `${protocol}://${forwardedHost}/${shortId}`;
+  }
+
+  // 3. Prefer BASE_URL environment variable if configured
+  if (process.env.BASE_URL && process.env.BASE_URL !== "sniply") {
+    const base = /^https?:\/\//i.test(process.env.BASE_URL)
+      ? process.env.BASE_URL
+      : `https://${process.env.BASE_URL}`;
+    return `${base.replace(/\/+$/, "")}/${shortId}`;
+  }
+
+  const protocol = req?.headers?.["x-forwarded-proto"] || req?.protocol || "http";
+  const host = forwardedHost || req?.get?.("host") || "localhost:3000";
   return `${protocol}://${host}/${shortId}`;
 };
 
@@ -231,4 +251,4 @@ export {
   getRecentUrls,
   urlDelete,
   firstPage,
-};
+};

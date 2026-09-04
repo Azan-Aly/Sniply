@@ -62,15 +62,22 @@ const Analytics = () => {
     )
   }
 
+  const getDisplayUrl = (link) => {
+    if (typeof window !== 'undefined' && link?.shortId) {
+      return `${window.location.origin}/${link.shortId}`
+    }
+    return link?.shortUrl || ''
+  }
+
   // Prepare data for charts
   const topLinks = recentLinks
     .sort((a, b) => b.clicks - a.clicks)
     .slice(0, 8)
 
   const chartData = topLinks.map(link => ({
-    name: link.shortUrl.split('/').pop().slice(0, 10),
+    name: (link.shortId || link.shortUrl?.split('/').pop() || '').slice(0, 10),
     clicks: link.clicks,
-    shortUrl: link.shortUrl
+    shortUrl: getDisplayUrl(link)
   }))
 
   const pieData = recentLinks.length > 0
@@ -239,7 +246,7 @@ const Analytics = () => {
                     >
                       <td className="py-4 px-4">
                         <span className="text-emerald-600 font-semibold font-mono">
-                          {link.shortUrl}
+                          {getDisplayUrl(link)}
                         </span>
                       </td>
                       <td className="py-4 px-4">

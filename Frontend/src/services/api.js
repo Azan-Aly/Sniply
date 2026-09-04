@@ -1,6 +1,15 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? "" : "http://localhost:3000");
+// If the app is accessed on any live production domain (like sniplyy.vercel.app),
+// ALWAYS use relative path "" (same origin). Only use localhost when running on localhost.
+const isLocalhost =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1");
+
+const API_BASE_URL = !isLocalhost
+  ? ""
+  : (import.meta.env.VITE_API_BASE_URL || "http://localhost:3000");
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

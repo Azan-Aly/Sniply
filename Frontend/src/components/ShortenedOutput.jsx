@@ -3,7 +3,14 @@ import { Copy, Check, ExternalLink } from 'lucide-react'
 
 const ShortenedOutput = ({ response }) => {
   const [copied, setCopied] = useState(false)
-  const resp = response?.data?.shortUrl
+  const shortId = response?.data?.shortId
+  const rawUrl = response?.data?.shortUrl
+  
+  // Guarantee the displayed URL always uses the live domain where the user is browsing
+  const resp = (shortId && typeof window !== 'undefined')
+    ? `${window.location.origin}/${shortId}`
+    : rawUrl
+
   const inputRef = useRef(null)
 
   if (!resp) return null
