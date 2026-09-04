@@ -9,19 +9,19 @@
       }
     },
     {
-      "src": "Backend/index.js",
+      "src": "api/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/Backend/index.js" },
-    { "src": "/url/(.*)", "dest": "/Backend/index.js" },
-    { "src": "/health", "dest": "/Backend/index.js" },
+    { "src": "/api/(.*)", "dest": "/api/index.js" },
+    { "src": "/url/(.*)", "dest": "/api/index.js" },
+    { "src": "/health", "dest": "/api/index.js" },
     { "src": "/assets/(.*)", "dest": "/Frontend/assets/$1" },
     { "src": "/favicon.ico", "dest": "/Frontend/favicon.ico" },
     { "src": "/([^/]+\\.[^/]+)", "dest": "/Frontend/$1" },
     { "src": "/(dashboard|analytics|profile|register|login|about)(.*)", "dest": "/Frontend/index.html" },
     { "src": "/", "dest": "/Frontend/index.html" },
-    { "src": "/(.*)", "dest": "/Backend/index.js" }
+    { "src": "/(.*)", "dest": "/api/index.js" }
   ]
 }
