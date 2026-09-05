@@ -42,11 +42,11 @@ const Score = () => {
   ]
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-2 md:px-1 py-10">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:px-2 md:px-1 py-10">
       {stats.map((stat) => (
         <div
           key={stat.id}
-          className="bg-white backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+          className="bg-white backdrop-blur-lg border border-white/10 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
         >
           <div className="flex items-center justify-between mb-4">
             <span className="text-3xl">{stat.icon}</span>

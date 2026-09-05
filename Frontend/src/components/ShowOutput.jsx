@@ -105,7 +105,7 @@ const ShowOutput = ({ refreshTrigger }) => {
             {recentLinks.map((link, index) => (
               <div
                 key={link.shortId}
-                className='group rounded-3xl border border-slate-200 bg-white p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:border-emerald-200 animate-in fade-in slide-in-from-bottom-2'
+                className='group rounded-2xl border border-slate-200 bg-white p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:border-emerald-200 animate-in fade-in slide-in-from-bottom-2'
                 style={{
                   animationDelay: `${index * 50}ms`
                 }}
@@ -122,7 +122,7 @@ const ShowOutput = ({ refreshTrigger }) => {
                         href={getDisplayUrl(link)}
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='text-emerald-600 font-bold font-mono text-lg hover:text-emerald-700 hover:underline transition-colors'
+                        className='text-emerald-600 font-bold break-all font-mono text-md sm:text-lg hover:text-emerald-700 hover:underline transition-colors'
                       >
                         {getDisplayUrl(link)}
                       </a>

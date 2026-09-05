@@ -115,8 +115,8 @@ const Profile = () => {
     : user.username?.slice(0, 2).toUpperCase()
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-100 via-white to-emerald-50 px-4 py-10">
-      <div className="mx-auto max-w-7xl overflow-hidden rounded-[18px] bg-white shadow-[0_10px_60px_rgba(0,0,0,0.08)]">
+    <div className="min-h-screen bg-linear-to-br from-slate-100 via-white to-emerald-50 sm:px-4 sm:py-10">
+      <div className="mx-auto max-w-7xl overflow-hidden sm:rounded-[18px] bg-white shadow-[0_10px_60px_rgba(0,0,0,0.08)]">
 
         {/* Top Banner */}
         <div className="relative overflow-hidden bg-linear-to-r from-emerald-500 to-teal-500 px-8 py-12">
@@ -142,7 +142,7 @@ const Profile = () => {
             <button
               onClick={handleLogout}
               disabled={loggingOut}
-              className="flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3 font-semibold text-slate-800 shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3 font-semibold text-slate-800 shadow-lg transition-all duration-300 hover:text-red-500 cursor-pointer hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loggingOut ? (
                 <>
@@ -160,7 +160,7 @@ const Profile = () => {
         </div>
 
         {/* Main Content */}
-        <div className="grid gap-8 p-8 lg:grid-cols-[340px_1fr]">
+        <div className="grid gap-8 sm:p-8 lg:grid-cols-[340px_1fr]">
 
           {/* Left Side */}
           <div className="rounded-4xl border border-slate-200 bg-slate-50 p-8 shadow-lg">
@@ -235,7 +235,7 @@ const Profile = () => {
             </div>
 
             {/* Stats */}
-            <div className="mt-10 grid grid-cols-2 gap-4">
+            {/* <div className="mt-10 grid grid-cols-2 gap-4">
               <div className="rounded-2xl bg-white p-4 text-center shadow-sm">
                 <h3 className="text-2xl font-bold text-slate-800">12</h3>
                 <p className="text-sm text-slate-500">Posts</p>
@@ -245,15 +245,15 @@ const Profile = () => {
                 <h3 className="text-2xl font-bold text-slate-800">4.8</h3>
                 <p className="text-sm text-slate-500">Rating</p>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Right Side */}
           <div className="space-y-8">
 
             {/* Account Info */}
-            <div className="rounded-4xl border border-slate-200 bg-white p-8 shadow-lg">
-              <h2 className="mb-8 text-2xl font-bold text-slate-800">
+            <div className="rounded-2xl border border-slate-200 bg-white py-8 sm:p-8 shadow-lg">
+              <h2 className="mb-8 text-2xl font-bold text-slate-800 p-4">
                 Account Information
               </h2>
 
@@ -311,7 +311,7 @@ const Profile = () => {
             </div>
 
             {/* Summary */}
-            <div className="rounded-4xl bg-linear-to-r from-emerald-50 to-teal-50 p-8 shadow-lg">
+            <div className="rounded-2xl bg-linear-to-r from-emerald-50 to-teal-50 p-8 shadow-lg">
               <h2 className="text-2xl font-bold text-slate-800">
                 Profile Summary
               </h2>
